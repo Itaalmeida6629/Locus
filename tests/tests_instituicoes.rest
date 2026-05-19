@@ -1,39 +1,60 @@
-@baseUrl = http://localhost:3000/instituicoes
-
-# Insira o token gerado aqui para liberar o POST, PUT e DELETE
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.exemploDeToken...
+### Configurações Globais
+@baseUrl = http://localhost:3000
+@contentType = application/json
 
 ### ----------------------------------------------------
-### ROTAS PÚBLICAS
+### AUTENTICAÇÃO
 ### ----------------------------------------------------
 
-# Listar todas
-GET {{baseUrl}}
+# @name requisicaoLogin
+# Realizar login para obter o token do administrador inicial
+POST {{baseUrl}}/usuarios/login
+Content-Type: {{contentType}}
+
+{
+    "email": "admin@locus.com",
+    "senha_hash": "LocusAdmin"
+}
+
+### ----------------------------------------------------
+### CONFIGURAÇÃO DO TOKEN AUTOMÁTICO
+### ----------------------------------------------------
+
+# Pega automaticamente o token retornado pela requisição acima
+@token = {{requisicaoLogin.response.body.token}}
+
+
+### ----------------------------------------------------
+### ROTAS PÚBLICAS DE INSTITUIÇÕES
+### ----------------------------------------------------
+
+# Listar todas as instituições
+GET {{baseUrl}}/instituicoes
 
 ###
 
-# Buscar por ID
-GET {{baseUrl}}/1
+# Buscar instituição por ID
+GET {{baseUrl}}/instituicoes/1
 
 ###
 
-# Buscar por Nome
-GET {{baseUrl}}/nome/Universidade Locus do Brasil
+# Buscar instituição por Nome
+GET {{baseUrl}}/instituicoes/nome/Universidade Locus do Brasil
 
 ###
 
-# Buscar por Cidade
-GET {{baseUrl}}/cidade/Porto Alegre
+# Buscar instituições por Cidade
+GET {{baseUrl}}/instituicoes/cidade/Porto Alegre
 
 
 ### ----------------------------------------------------
 ### ROTAS PROTEGIDAS (REQUEREM TOKEN ADMIN)
 ### ----------------------------------------------------
 
-# Criar nova
-POST {{baseUrl}}
+# Criar nova instituição
+POST {{baseUrl}}/instituicoes
 Authorization: Bearer {{token}}
-Content-Type: application/json
+Content-Type: {{contentType}}
 
 {
   "nome": "Instituto Tecnológico Locus",
@@ -48,10 +69,10 @@ Content-Type: application/json
 
 ###
 
-# Atualizar dados
-PUT {{baseUrl}}/1
+# Atualizar dados da instituição
+PUT {{baseUrl}}/instituicoes/2
 Authorization: Bearer {{token}}
-Content-Type: application/json
+Content-Type: {{contentType}}
 
 {
   "nome": "Instituto Locus - Nome Atualizado",
@@ -60,6 +81,6 @@ Content-Type: application/json
 
 ###
 
-# Deletar registro
-DELETE {{baseUrl}}/1
+# Deletar registro de instituição
+DELETE {{baseUrl}}/instituicoes/2
 Authorization: Bearer {{token}}

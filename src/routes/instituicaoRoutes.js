@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require('express')
 const InstituicaoController = require('../controllers/instituicaoController')
 const { authenticateToken, authorizeRole } = require('../middlewares/auth.middleware')
@@ -10,8 +9,8 @@ router.get('/:id', InstituicaoController.getById)
 router.get('/nome/:nome', InstituicaoController.getByName)
 router.get('/cidade/:cidade', InstituicaoController.getByCidade)
 
-router.post('/', authenticateToken, authorizeRole('ADMIN'), InstituicaoController.create)
-router.put('/:id', authenticateToken, authorizeRole('ADMIN'), InstituicaoController.update)
-router.delete('/:id', authenticateToken, authorizeRole('ADMIN'), InstituicaoController.delete)
+router.post('/', authenticateToken, authorizeRole('admin'), InstituicaoController.create)
+router.put('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.update)
+router.delete('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.delete)
 
 module.exports = router

@@ -1,0 +1,101 @@
+### Configurações Globais
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### ----------------------------------------------------
+### AUTENTICAÇÃO
+### ----------------------------------------------------
+
+# @name requisicaoLogin
+# Realizar login para obter o token do administrador inicial
+POST {{baseUrl}}/usuarios/login
+Content-Type: {{contentType}}
+
+{
+    "email": "admin@locus.com",
+    "senha_hash": "LocusAdmin"
+}
+
+###
+# @name requisicaoLogin
+# Realizar login para obter o token do professor
+POST {{baseUrl}}/usuarios/login
+Content-Type: {{contentType}}
+
+{
+    "email": "joao@locus.com",
+    "senha_hash": "senha123"
+}
+### ----------------------------------------------------
+### CONFIGURAÇÃO DO TOKEN AUTOMÁTICO
+### ----------------------------------------------------
+
+# Pega automaticamente o token retornado pela requisição acima
+@token = {{requisicaoLogin.response.body.token}}
+
+
+### ----------------------------------------------------
+### ROTAS PROTEGIDAS (REQUEREM TOKEN ADMIN OU PROFESSOR NO PUT)
+### ----------------------------------------------------
+
+# Listar todos os usuários
+GET {{baseUrl}}/usuarios
+Authorization: Bearer {{token}}
+
+###
+
+# Buscar usuário por ID
+GET {{baseUrl}}/usuarios/1
+Authorization: Bearer {{token}}
+
+###
+
+# Buscar usuário por Email
+GET {{baseUrl}}/usuarios/email/admin@locus.com
+Authorization: Bearer {{token}}
+
+###
+
+# Listar usuários por ID da Instituição
+GET {{baseUrl}}/usuarios/instituicao/1
+Authorization: Bearer {{token}}
+
+###
+
+# Criar novo usuário
+POST {{baseUrl}}/usuarios
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "nome": "João Professor",
+    "email": "joao@locus.com",
+    "senha_hash": "senha123",
+    "telefone": "54999999999",
+    "rua": "Rua das Flores",
+    "numero": "456",
+    "bairro": "Centro",
+    "cidade": "Sua Cidade",
+    "estado": "RS",
+    "cep": "95150000",
+    "tipo": "professor",
+    "instituicao_id": 1
+}
+
+###
+
+# Atualizar dados do usuário (Permite Admin ou o próprio usuário logado)
+PUT {{baseUrl}}/usuarios/3
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "nome": "Joao Atualizado",
+    "telefone": "54988888888"
+}
+
+###
+
+# Deletar registro de usuário
+DELETE {{baseUrl}}/usuarios/2
+Authorization: Bearer {{token}}

@@ -3,13 +3,13 @@ function validateLogin(body) {
         return 'Corpo da requisição é obrigatório'
     }
 
-    const { email, senha } = body
+    const { email, senha_hash } = body
 
     if (!email) {
         return 'email é obrigatório'
     }
 
-    if (!senha) {
+    if (!senha_hash) {
         return 'senha é obrigatória'
     }
 
@@ -17,7 +17,7 @@ function validateLogin(body) {
         return 'email deve ser string'
     }
 
-    if (typeof senha !== 'string') {
+    if (typeof senha_hash !== 'string') {
         return 'senha deve ser string'
     }
 

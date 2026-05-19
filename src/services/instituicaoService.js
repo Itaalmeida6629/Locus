@@ -35,9 +35,12 @@ class InstituicaoService {
     }
 
     static async create(data) {
-        if (!data.nome || !data.rua || !data.numero || !data.bairro || !data.cidade || !data.estado || !data.telefone || !data.cep) {
-            throw new Error('Todos os campos são obrigatórios')
-        }
+        const camposObrigatorios = ['nome', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'cep']
+            for (const campo of camposObrigatorios) {
+        if (!data[campo] || (typeof data[campo] === 'string' && !data[campo].trim())) {
+            throw new Error(`O campo '${campo}' é obrigatório`)
+    }
+}
         const nomeNormalizado = data.nome.trim().toLowerCase()
         const existe = await InstituicaoModel.findByName(nomeNormalizado)
         if (existe) {
