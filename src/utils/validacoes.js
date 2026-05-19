@@ -25,4 +25,5 @@ function validarCamposEnderecoETelefone(payload) {
     }
 }
 
+
 module.exports = validarCamposEnderecoETelefone

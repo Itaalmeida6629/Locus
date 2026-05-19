@@ -9,8 +9,8 @@ router.get('/:id', InstituicaoController.getById)
 router.get('/nome/:nome', InstituicaoController.getByName)
 router.get('/cidade/:cidade', InstituicaoController.getByCidade)
 
-router.post('/', authenticateToken, authorizeRole('admin'), InstituicaoController.create)
-router.put('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.update)
-router.delete('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.delete)
+router.post('/', authenticateToken, authorizeRole('admin'), InstituicaoController.createInstituicao)
+router.put('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.updateInstituicao)
+router.delete('/:id', authenticateToken, authorizeRole('admin'), InstituicaoController.deleteInstituicao)
 
 module.exports = router

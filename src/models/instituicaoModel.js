@@ -21,19 +21,19 @@ class InstituicaoModel {
         return rows
     }
     
-    static async create({ nome, rua, numero, bairro, cidade, estado, telefone, cep }) {
+    static async createInstituicao({ nome, rua, numero, bairro, cidade, estado, telefone, cep }) {
         const [result] = await db.query(
             'INSERT INTO Instituicoes (nome, rua, numero, bairro, cidade, estado, telefone, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
             [nome, rua, numero, bairro, cidade, estado, telefone, cep])
         return result.insertId
     }
 
-    static async update(id, data) {
+    static async updateInstituicao(id, data) {
         const fields = []
         const values = []
-        for (const key in data) {
-            fields.push(`${key} = ?`)
-            values.push(data[key])
+        for (const campo in data) {
+            fields.push(`${campo} = ?`)
+            values.push(data[campo])
         }
         values.push(id)
         const [result] = await db.query(
@@ -43,7 +43,7 @@ class InstituicaoModel {
         return result.affectedRows > 0
     }
 
-    static async delete(id) {
+    static async deleteInstituicao(id) {
         const [result] = await db.query('DELETE FROM Instituicoes WHERE id = ?', [id])
         return result.affectedRows > 0
     }

@@ -25,7 +25,7 @@ Content-Type: {{contentType}}
 
 
 ### ----------------------------------------------------
-### ROTAS PÚBLICAS DE INSTITUIÇÕES
+### ROTAS PÚBLICAS DE INSTITUIÇÕES (SUCESSO)
 ### ----------------------------------------------------
 
 # Listar todas as instituições
@@ -48,7 +48,7 @@ GET {{baseUrl}}/instituicoes/cidade/Porto Alegre
 
 
 ### ----------------------------------------------------
-### ROTAS PROTEGIDAS (REQUEREM TOKEN ADMIN)
+### ROTAS PROTEGIDAS (SUCESSO)
 ### ----------------------------------------------------
 
 # Criar nova instituição
@@ -70,7 +70,7 @@ Content-Type: {{contentType}}
 ###
 
 # Atualizar dados da instituição
-PUT {{baseUrl}}/instituicoes/2
+PUT {{baseUrl}}/instituicoes/3
 Authorization: Bearer {{token}}
 Content-Type: {{contentType}}
 
@@ -79,7 +79,88 @@ Content-Type: {{contentType}}
   "telefone": "51988887777"
 }
 
+
+### ----------------------------------------------------
+### CENÁRIOS DE ERRO - INSTITUIÇÕES
+### ----------------------------------------------------
+
+# 1. Erro na Criação: Falta de Campo Obrigatório (Deve retornar 400 - "O campo 'cep' é obrigatório")
+POST {{baseUrl}}/instituicoes
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Instituição Incompleta",
+  "rua": "Rua Teste",
+  "numero": "123",
+  "bairro": "Centro",
+  "cidade": "Garibaldi",
+  "estado": "RS",
+  "telefone": "5434620000"
+}
+
 ###
+
+# 2. Erro na Criação: Nome já cadastrado (Deve retornar 400 - "Instituição já cadastrada")
+POST {{baseUrl}}/instituicoes
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Instituto Tecnológico Locus",
+  "rua": "Outra Rua",
+  "numero": "10",
+  "bairro": "Centro",
+  "cidade": "Porto Alegre",
+  "estado": "RS",
+  "cep": "90000000",
+  "telefone": "5132109876"
+}
+
+###
+
+# 3. Erro na Criação: Campo com string vazia (Deve retornar 400 - "O campo 'nome' é obrigatório")
+POST {{baseUrl}}/instituicoes
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "   ",
+  "rua": "Avenida Central",
+  "numero": "100",
+  "bairro": "Centro",
+  "cidade": "Bento Gonçalves",
+  "estado": "RS",
+  "cep": "95700000",
+  "telefone": "5434510000"
+}
+
+###
+
+# 4. Erro de Autenticação: Criar sem Token (Deve retornar 401 - "Token não fornecido")
+POST {{baseUrl}}/instituicoes
+Content-Type: {{contentType}}
+
+{
+  "nome": "Intruso Faculdade",
+  "rua": "Rua Sem Acesso",
+  "numero": "99",
+  "bairro": "Invasão",
+  "cidade": "Porto Alegre",
+  "estado": "RS",
+  "cep": "90000000",
+  "telefone": "5100000000"
+}
+
+###
+
+# 5. Erro de Busca: ID inexistente (Deve retornar 404 - "Instituição não encontrada")
+GET {{baseUrl}}/instituicoes/999999
+
+
+### ----------------------------------------------------
+### DELEÇÃO 
+### ----------------------------------------------------
 
 # Deletar registro de instituição
 DELETE {{baseUrl}}/instituicoes/2

@@ -99,7 +99,7 @@ class UserService {
         }
         const senhaHash = await bcrypt.hash(data.senha_hash, 10)
 
-        const novoUsuario = await UserModel.create({ ...data, tipo: tipoNormalizado, senha_hash: senhaHash })
+        const novoUsuario = await UserModel.createUser({ ...data, tipo: tipoNormalizado, senha_hash: senhaHash })
         if (novoUsuario) delete novoUsuario.senha_hash
         return novoUsuario
     }
@@ -149,7 +149,7 @@ class UserService {
             payload.senha_hash = await bcrypt.hash(payload.senha_hash, 10)
         }
         validarCamposEnderecoETelefone(payload)
-        return await UserModel.update(id, payload)
+        return await UserModel.updateUser(id, payload)
     }
 
     static async deleteUser(id) {
@@ -157,7 +157,7 @@ class UserService {
         if (!usuario) {
             throw new Error('Usuário não encontrado')
         }
-        return await UserModel.delete(id)
+        return await UserModel.deleteUser(id)
     }
 }
 

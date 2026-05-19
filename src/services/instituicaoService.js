@@ -34,7 +34,7 @@ class InstituicaoService {
         return instituicoes 
     }
 
-    static async create(data) {
+    static async createInstituicao(data) {
         const camposObrigatorios = ['nome', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'cep']
             for (const campo of camposObrigatorios) {
         if (!data[campo] || (typeof data[campo] === 'string' && !data[campo].trim())) {
@@ -48,10 +48,10 @@ class InstituicaoService {
         }
         validarCamposEnderecoETelefone(data)
 
-        return await InstituicaoModel.create(data)
+        return await InstituicaoModel.createInstituicao(data)
     }
 
-    static async update(id, data) {
+    static async updateInstituicao(id, data) {
         const notFind = await InstituicaoModel.findById(id)
         if (!notFind) {
             throw new Error('Instituição não encontrada')
@@ -67,15 +67,15 @@ class InstituicaoService {
                 throw new Error('Instituição já cadastrada')
             }}
         validarCamposEnderecoETelefone(payload)
-        return await InstituicaoModel.update(id, payload)
+        return await InstituicaoModel.updateInstituicao(id, payload)
     }
 
-    static async delete(id) {
+    static async deleteInstituicao(id) {
         const notFind = await InstituicaoModel.findById(id)
         if (!notFind) {
             throw new Error('Instituição não encontrada')
         }
-        return await InstituicaoModel.delete(id)
+        return await InstituicaoModel.deleteInstituicao(id)
     }
 }
 

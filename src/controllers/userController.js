@@ -5,8 +5,7 @@ class UserController {
         try {
             const { token } = await UserService.login(req.body)
             res.status(200).json({ token })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -15,8 +14,7 @@ class UserController {
         try {
             const usuarios = await UserService.getAllUsers()
             res.status(200).json(usuarios)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -26,8 +24,7 @@ class UserController {
             const { id } = req.params
             const usuario = await UserService.getUserById(id)
             res.status(200).json(usuario)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -37,8 +34,7 @@ class UserController {
             const { email } = req.params
             const usuario = await UserService.getUserByEmail(email)
             res.status(200).json(usuario)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -48,8 +44,7 @@ class UserController {
             const { instituicao_id } = req.params
             const usuarios = await UserService.getUsersByInstituicaoId(instituicao_id)
             res.status(200).json(usuarios)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -58,8 +53,7 @@ class UserController {
         try {
             const usuario = await UserService.createUser(req.body)
             res.status(201).json({ message: 'Usuário criado com sucesso', usuario })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -70,8 +64,7 @@ class UserController {
             const usuarioLogado = req.user
             await UserService.updateUser(id, req.body, usuarioLogado)
             res.status(200).json({ message: 'Usuário atualizado com sucesso' })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -81,8 +74,7 @@ class UserController {
             const { id } = req.params
             await UserService.deleteUser(id)
             res.status(200).json({ message: 'Usuário deletado com sucesso' })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }

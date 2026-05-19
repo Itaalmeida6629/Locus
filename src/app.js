@@ -10,9 +10,11 @@ app.use(helmet())
 
 const instituicaoRoutes = require('./routes/instituicaoRoutes')
 const userRoutes = require('./routes/userRoutes')
+const salasRoutes = require('./routes/salasRoutes')
 
-app.use('/usuarios', userRoutes)
 app.use('/instituicoes', instituicaoRoutes)
+app.use('/usuarios', userRoutes)
+app.use('/salas', salasRoutes)
 
 app.use(errorMiddleware)
 

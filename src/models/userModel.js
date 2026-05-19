@@ -2,12 +2,12 @@ const db = require('../config/database')
 
 class UserModel {
     static async findAll() {
-        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios')
+        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios')
         return rows
     }
 
     static async findById(id) {
-        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios WHERE id = ?', [id])
+        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios WHERE id = ?', [id])
         return rows[0]
     }
 
@@ -17,23 +17,23 @@ class UserModel {
     }
 
     static async findByInstituicaoId(instituicao_id) {
-        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios WHERE instituicao_id = ?', [instituicao_id])
+        const [rows] = await db.query('SELECT id, nome, email, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id, criado_em FROM Usuarios WHERE instituicao_id = ?', [instituicao_id])
         return rows
     }
 
-    static async create({ nome, email, senha_hash, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id }) {
+    static async createUser({ nome, email, senha_hash, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id }) {
         const [result] = await db.query(
             'INSERT INTO Usuarios (nome, email, senha_hash, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
             [nome, email, senha_hash, telefone, rua, numero, bairro, cidade, estado, tipo, instituicao_id])
         return result.insertId
     }
 
-    static async update(id, data) {
+    static async updateUser(id, data) {
         const fields = []
         const values = []
-        for (const key in data) {
-            fields.push(`${key} = ?`)
-            values.push(data[key])
+        for (const campo in data) {
+            fields.push(`${campo} = ?`)
+            values.push(data[campo])
         }
         values.push(id)
         const [result] = await db.query(
@@ -43,7 +43,7 @@ class UserModel {
         return result.affectedRows > 0
     }
 
-    static async delete(id) {
+    static async deleteUser(id) {
         const [result] = await db.query('DELETE FROM Usuarios WHERE id = ?', [id])
         return result.affectedRows > 0
     }

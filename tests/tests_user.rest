@@ -6,8 +6,8 @@
 ### AUTENTICAÇÃO
 ### ----------------------------------------------------
 
-# @name requisicaoLogin
-# Realizar login para obter o token do administrador inicial
+# @name loginAdmin
+# Realizar login para obter o token do administrador
 POST {{baseUrl}}/usuarios/login
 Content-Type: {{contentType}}
 
@@ -17,7 +17,8 @@ Content-Type: {{contentType}}
 }
 
 ###
-# @name requisicaoLogin
+
+# @name loginProfessor
 # Realizar login para obter o token do professor
 POST {{baseUrl}}/usuarios/login
 Content-Type: {{contentType}}
@@ -26,56 +27,57 @@ Content-Type: {{contentType}}
     "email": "joao@locus.com",
     "senha_hash": "senha123"
 }
-### ----------------------------------------------------
-### CONFIGURAÇÃO DO TOKEN AUTOMÁTICO
-### ----------------------------------------------------
-
-# Pega automaticamente o token retornado pela requisição acima
-@token = {{requisicaoLogin.response.body.token}}
-
 
 ### ----------------------------------------------------
-### ROTAS PROTEGIDAS (REQUEREM TOKEN ADMIN OU PROFESSOR NO PUT)
+### CONFIGURAÇÃO DOS TOKENS AUTOMÁTICOS
+### ----------------------------------------------------
+
+@tokenAdmin = {{loginAdmin.response.body.token}}
+@tokenProfessor = {{loginProfessor.response.body.token}}
+
+
+### ----------------------------------------------------
+### ROTAS PROTEGIDAS (SUCESSO - USANDO TOKEN ADMIN)
 ### ----------------------------------------------------
 
 # Listar todos os usuários
 GET {{baseUrl}}/usuarios
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 
 ###
 
 # Buscar usuário por ID
 GET {{baseUrl}}/usuarios/1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 
 ###
 
 # Buscar usuário por Email
 GET {{baseUrl}}/usuarios/email/admin@locus.com
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 
 ###
 
 # Listar usuários por ID da Instituição
 GET {{baseUrl}}/usuarios/instituicao/1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 
 ###
 
 # Criar novo usuário
 POST {{baseUrl}}/usuarios
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 Content-Type: {{contentType}}
 
 {
     "nome": "João Professor",
-    "email": "joao@locus.com",
+    "email": "joao@locus1.com",
     "senha_hash": "senha123",
     "telefone": "54999999999",
     "rua": "Rua das Flores",
     "numero": "456",
     "bairro": "Centro",
-    "cidade": "Sua Cidade",
+    "cidade": "Garibaldi",
     "estado": "RS",
     "cep": "95150000",
     "tipo": "professor",
@@ -84,9 +86,9 @@ Content-Type: {{contentType}}
 
 ###
 
-# Atualizar dados do usuário (Permite Admin ou o próprio usuário logado)
+# Atualizar dados do usuário (Feito pelo Admin ou pelo próprio usuário)
 PUT {{baseUrl}}/usuarios/3
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}
 Content-Type: {{contentType}}
 
 {
@@ -94,8 +96,75 @@ Content-Type: {{contentType}}
     "telefone": "54988888888"
 }
 
+
+### ----------------------------------------------------
+### CENÁRIOS DE ERRO - USUÁRIOS
+### ----------------------------------------------------
+
+# 1. Erro na Criação: Email Duplicado (Deve retornar 400 - "E-mail já cadastrado")
+POST {{baseUrl}}/usuarios
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: {{contentType}}
+
+{
+    "nome": "Clone do Admin",
+    "email": "admin@locus.com",
+    "senha_hash": "123456",
+    "telefone": "54988888888",
+    "rua": "Rua Qualquer",
+    "numero": "1",
+    "bairro": "Centro",
+    "cidade": "Garibaldi",
+    "estado": "RS",
+    "cep": "95150000",
+    "tipo": "professor",
+    "instituicao_id": 1
+}
+
 ###
+
+# 2. Erro na Criação: Tipo de usuário inválido (Deve retornar 400 - Tipo inválido)
+POST {{baseUrl}}/usuarios
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: {{contentType}}
+
+{
+    "nome": "Usuário Inválido",
+    "email": "invalido@locus.com",
+    "senha_hash": "senha123",
+    "telefone": "54999999999",
+    "rua": "Rua Nova",
+    "numero": "12",
+    "bairro": "Centro",
+    "cidade": "Garibaldi",
+    "estado": "RS",
+    "cep": "95150000",
+    "tipo": "diretor", 
+    "instituicao_id": 1
+}
+
+###
+
+# 3. Erro de Autorização: Professor tentando listar todos os usuários (Deve retornar 403 - Não autorizado)
+GET {{baseUrl}}/usuarios/
+Authorization: Bearer {{tokenProfessor}}
+
+###
+
+# 4. Erro de Autenticação: Acesso sem token (Deve retornar 401 - "Token não fornecido")
+GET {{baseUrl}}/usuarios
+
+###
+
+# 5. Erro de Busca: Usuário com ID Inexistente (Deve retornar 404 - "Usuário não encontrado")
+GET {{baseUrl}}/usuarios/999999
+Authorization: Bearer {{tokenAdmin}}
+
+
+### ----------------------------------------------------
+### DELEÇÃO 
+### ----------------------------------------------------
 
 # Deletar registro de usuário
 DELETE {{baseUrl}}/usuarios/2
-Authorization: Bearer {{token}}
+Authorization: Bearer {{tokenAdmin}}

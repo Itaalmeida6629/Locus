@@ -5,8 +5,7 @@ class InstituicaoController {
         try {
             const instituicoes = await InstituicaoService.getAll()
             res.status(200).json(instituicoes)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -16,8 +15,7 @@ class InstituicaoController {
             const { id } = req.params
             const instituicao = await InstituicaoService.getById(id)
             res.status(200).json(instituicao)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -27,8 +25,7 @@ class InstituicaoController {
             const { nome } = req.params
             const instituicao = await InstituicaoService.getByName(nome)
             res.status(200).json(instituicao)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
@@ -38,40 +35,36 @@ class InstituicaoController {
             const { cidade } = req.params
             const instituicoes = await InstituicaoService.getByCidade(cidade)
             res.status(200).json(instituicoes)
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
 
-    static async create(req, res, next) {
+    static async createInstituicao(req, res, next) {
         try {
-            const id = await InstituicaoService.create(req.body)
+            const id = await InstituicaoService.createInstituicao(req.body)
             res.status(201).json({ message: 'Instituição criada com sucesso', id })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
 
-    static async update(req, res, next) {
+    static async updateInstituicao(req, res, next) {
         try {
             const { id } = req.params
-            await InstituicaoService.update(id, req.body)
+            await InstituicaoService.updateInstituicao(id, req.body)
             res.status(200).json({ message: 'Instituição atualizada com sucesso' })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }
 
-    static async delete(req, res, next) {
+    static async deleteInstituicao(req, res, next) {
         try {
             const { id } = req.params
-            await InstituicaoService.delete(id)
+            await InstituicaoService.deleteInstituicao(id)
             res.status(200).json({ message: 'Instituição excluída com sucesso' })
-        }
-        catch (error) {
+        } catch (error) {
             next(error)
         }
     }

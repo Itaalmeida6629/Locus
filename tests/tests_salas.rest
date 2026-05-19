@@ -1,0 +1,129 @@
+### Configurações Globais
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### ----------------------------------------------------
+### AUTENTICAÇÃO
+### ----------------------------------------------------
+
+# @name requisicaoLogin
+# Realizar login para obter o token do administrador inicial
+POST {{baseUrl}}/usuarios/login
+Content-Type: {{contentType}}
+
+{
+    "email": "admin@locus.com",
+    "senha_hash": "LocusAdmin"
+}
+
+### ----------------------------------------------------
+### CONFIGURAÇÃO DO TOKEN AUTOMÁTICO
+### ----------------------------------------------------
+
+# Pega automaticamente o token retornado pela requisição acima
+@token = {{requisicaoLogin.response.body.token}}
+
+
+### ----------------------------------------------------
+### ROTAS PÚBLICAS DE SALAS
+### ----------------------------------------------------
+
+# Listar todas as salas de uma instituição específica
+GET {{baseUrl}}/salas/instituicao/1
+
+###
+
+# Buscar uma sala específica por ID
+GET {{baseUrl}}/salas/1
+
+
+### ----------------------------------------------------
+### ROTAS PROTEGIDAS (SUCESSO)
+### ----------------------------------------------------
+
+# Criar nova sala (Tipos aceitos: "sala de aula", "laboratório", "auditório")
+POST {{baseUrl}}/salas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "tipo": "Laboratório",
+    "capacidade": 30,
+    "instituicao_id": 1
+}
+
+###
+
+# Atualizar dados de uma sala (Não permite alterar instituicao_id)
+PUT {{baseUrl}}/salas/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "tipo": "sala de aula",
+    "capacidade": 45
+}
+
+
+### ----------------------------------------------------
+### CENÁRIOS DE ERRO (VALIDAÇÕES DO SERVICE E AUTH)
+### ----------------------------------------------------
+
+# 1. Erro na Criação: Tipo inválido (Deve retornar 400 - "O tipo da sala deve ser...")
+POST {{baseUrl}}/salas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "tipo": "Cozinha",
+    "capacidade": 20,
+    "instituicao_id": 1
+}
+
+###
+
+# 2. Erro na Criação: Capacidade negativa ou zero (Deve retornar 400 - "A capacidade deve ser...")
+POST {{baseUrl}}/salas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "tipo": "sala de aula",
+    "capacidade": 0,
+    "instituicao_id": 1
+}
+
+###
+
+# 3. Erro na Criação: Falta campo obrigatório (Deve retornar 400 - "O campo 'tipo' é obrigatório")
+POST {{baseUrl}}/salas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "capacidade": 50,
+    "instituicao_id": 1
+}
+
+###
+
+# 4. Erro na Atualização: Mudar Instituição (Deve retornar 400 - "Não é permitido alterar a instituição...")
+PUT {{baseUrl}}/salas/2
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "instituicao_id": 1
+}
+
+###
+
+# 5. Erro de Autenticação: Rota protegida sem Token (Deve retornar 401 - "Token não fornecido")
+POST {{baseUrl}}/salas
+Content-Type: {{contentType}}
+
+{
+    "tipo": "auditório",
+    "capacidade": 100,
+    "instituicao_id": 1
+}
