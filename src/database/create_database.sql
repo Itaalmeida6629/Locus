@@ -1,0 +1,2 @@
+CREATE DATABASE Locus;
+USE Locus;

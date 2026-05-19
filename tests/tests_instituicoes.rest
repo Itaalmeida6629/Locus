@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:3000/instituicoes
+
+# Insira o token gerado aqui para liberar o POST, PUT e DELETE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.exemploDeToken...
+
+### ----------------------------------------------------
+### ROTAS PÚBLICAS
+### ----------------------------------------------------
+
+# Listar todas
+GET {{baseUrl}}
+
+###
+
+# Buscar por ID
+GET {{baseUrl}}/1
+
+###
+
+# Buscar por Nome
+GET {{baseUrl}}/nome/Universidade Locus do Brasil
+
+###
+
+# Buscar por Cidade
+GET {{baseUrl}}/cidade/Porto Alegre
+
+
+### ----------------------------------------------------
+### ROTAS PROTEGIDAS (REQUEREM TOKEN ADMIN)
+### ----------------------------------------------------
+
+# Criar nova
+POST {{baseUrl}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Instituto Tecnológico Locus",
+  "rua": "Avenida da Inovação",
+  "numero": "500",
+  "bairro": "Distrito Industrial",
+  "cidade": "Porto Alegre",
+  "estado": "RS",
+  "cep": "90000000",
+  "telefone": "5132109876"
+}
+
+###
+
+# Atualizar dados
+PUT {{baseUrl}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Instituto Locus - Nome Atualizado",
+  "telefone": "51988887777"
+}
+
+###
+
+# Deletar registro
+DELETE {{baseUrl}}/1
+Authorization: Bearer {{token}}
