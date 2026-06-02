@@ -46,7 +46,6 @@ class ReservasService {
     }
 
     static async createReserva(data) {
-        // Atualizado: agora valida os campos de data_inicio e data_fim
         const camposObrigatorios = ['usuario_id', 'sala_id', 'data_inicio', 'data_fim', 'status']
         for (const campo of camposObrigatorios) {
             if (data[campo] === undefined || data[campo] === null || (typeof data[campo] === 'string' && !data[campo].trim())) {
@@ -67,7 +66,6 @@ class ReservasService {
             throw new Error('Usuário não encontrado')
         }
 
-        // Conversão e validação das datas informadas
         const inicioNova = new Date(data.data_inicio)
         const fimNova = new Date(data.data_fim)
         const dataAtual = new Date()
@@ -82,7 +80,6 @@ class ReservasService {
             throw new Error('A data de término deve ser posterior à data de início.')
         }
 
-        // Validação de sobreposição de intervalos no mesmo espaço
         const salaReservada = await ReservasModel.findBySalaId(data.sala_id)
         const listaReservas = Array.isArray(salaReservada) ? salaReservada : []
 
@@ -92,8 +89,7 @@ class ReservasService {
             const reservaInicio = new Date(reserva.data_inicio)
             const reservaFim = new Date(reserva.data_fim)
 
-            // Fórmula matemática para detectar qualquer tipo de intersecção entre horários:
-            // (InicioA < FimB) E (FimA > InicioB)
+
             return (inicioNova.getTime() < reservaFim.getTime() && fimNova.getTime() > reservaInicio.getTime())
         })
 
@@ -130,7 +126,6 @@ class ReservasService {
             }
         }
 
-        // Atualizado: Verifica conflitos se houver mudança de sala OU de qualquer uma das datas
         if (payload.data_inicio !== undefined || payload.data_fim !== undefined || payload.sala_id !== undefined) {
 
             const salaIdAlvo = payload.sala_id !== undefined ? payload.sala_id : reservaExistente.sala_id
@@ -139,7 +134,6 @@ class ReservasService {
                 throw new Error('Sala não encontrada')
             }
 
-            // Fallbacks caso a requisição altere apenas uma das datas passadas
             const strInicioAlvo = payload.data_inicio !== undefined ? payload.data_inicio : reservaExistente.data_inicio
             const strFimAlvo = payload.data_fim !== undefined ? payload.data_fim : reservaExistente.data_fim
 
