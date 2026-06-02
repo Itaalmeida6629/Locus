@@ -37,7 +37,7 @@ class InstituicaoService {
     static async createInstituicao(data) {
         const camposObrigatorios = ['nome', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'cep']
             for (const campo of camposObrigatorios) {
-        if (!data[campo] || (typeof data[campo] === 'string' && !data[campo].trim())) {
+        if (data[campo] === undefined || data[campo] === null || (typeof data[campo] === 'string' && !data[campo].trim())) {
             throw new Error(`O campo '${campo}' é obrigatório`)
     }
 }

@@ -70,7 +70,7 @@ class UserService {
     static async createUser(data) {
         const camposObrigatorios = ['nome', 'email', 'senha_hash', 'telefone', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'cep', 'tipo', 'instituicao_id']
         for (const campo of camposObrigatorios) {
-            if (!data[campo]) {
+            if (data[campo] === undefined || data[campo] === null || (typeof data[campo] === 'string' && !data[campo].trim())) {
                 throw new Error(`Campo ${campo} é obrigatório`)
             }
         }

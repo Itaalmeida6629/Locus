@@ -39,12 +39,12 @@ GET {{baseUrl}}/instituicoes/1
 ###
 
 # Buscar instituição por Nome
-GET {{baseUrl}}/instituicoes/nome/Universidade Locus do Brasil
+GET {{baseUrl}}/instituicoes/nome/Instituicao Padrao Locus
 
 ###
 
 # Buscar instituições por Cidade
-GET {{baseUrl}}/instituicoes/cidade/Porto Alegre
+GET {{baseUrl}}/instituicoes/cidade/Sua Cidade
 
 
 ### ----------------------------------------------------
@@ -70,7 +70,7 @@ Content-Type: {{contentType}}
 ###
 
 # Atualizar dados da instituição
-PUT {{baseUrl}}/instituicoes/3
+PUT {{baseUrl}}/instituicoes/2
 Authorization: Bearer {{token}}
 Content-Type: {{contentType}}
 
@@ -107,7 +107,7 @@ Authorization: Bearer {{token}}
 Content-Type: {{contentType}}
 
 {
-  "nome": "Instituto Tecnológico Locus",
+  "nome": "Instituto Locus - Nome Atualizado",
   "rua": "Outra Rua",
   "numero": "10",
   "bairro": "Centro",

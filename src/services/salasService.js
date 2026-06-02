@@ -36,6 +36,10 @@ class SalasService {
             throw new Error('O tipo da sala deve ser "sala de aula", "laboratório" ou "auditório"')
         }
         
+        const instituicaoNaoExiste = await SalasModel.findInstituicaoById(data.instituicao_id)
+        if (!instituicaoNaoExiste) {
+            throw new Error('Instituição não encontrada')
+        }
         if (isNaN(data.instituicao_id) || data.instituicao_id <= 0) {
             throw new Error('O ID da instituição deve ser um número positivo')
         }

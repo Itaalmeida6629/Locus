@@ -12,7 +12,7 @@ async function criarPrimeiroAdmin() {
 
         console.log('Nenhum administrador encontrado. Iniciando configuracao inicial...')
 
-        const [instituicoes] = await db.query("SELECT id FROM Instituicoes WHERE id = 1")
+        const [instituicoes] = await db.query("SELECT id FROM Instituicoes LIMIT 1")
         if (instituicoes.length === 0) {
             await db.query(`
                 INSERT INTO Instituicoes (id, nome, rua, numero, bairro, cidade, estado, telefone, cep)

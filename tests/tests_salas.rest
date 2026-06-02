@@ -108,7 +108,7 @@ Content-Type: {{contentType}}
 ###
 
 # 4. Erro na Atualização: Mudar Instituição (Deve retornar 400 - "Não é permitido alterar a instituição...")
-PUT {{baseUrl}}/salas/2
+PUT {{baseUrl}}/salas/1
 Authorization: Bearer {{token}}
 Content-Type: {{contentType}}
 

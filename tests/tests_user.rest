@@ -71,7 +71,7 @@ Content-Type: {{contentType}}
 
 {
     "nome": "João Professor",
-    "email": "joao@locus1.com",
+    "email": "joao@locus.com",
     "senha_hash": "senha123",
     "telefone": "54999999999",
     "rua": "Rua das Flores",
@@ -87,7 +87,7 @@ Content-Type: {{contentType}}
 ###
 
 # Atualizar dados do usuário (Feito pelo Admin ou pelo próprio usuário)
-PUT {{baseUrl}}/usuarios/3
+PUT {{baseUrl}}/usuarios/2
 Authorization: Bearer {{tokenAdmin}}
 Content-Type: {{contentType}}
 
@@ -145,8 +145,8 @@ Content-Type: {{contentType}}
 
 ###
 
-# 3. Erro de Autorização: Professor tentando listar todos os usuários (Deve retornar 403 - Não autorizado)
-GET {{baseUrl}}/usuarios/
+# 3. Erro de Autorização: Professor tentando listar usuário pelo id (Deve retornar 403 - Não autorizado)
+GET {{baseUrl}}/usuarios/2
 Authorization: Bearer {{tokenProfessor}}
 
 ###
