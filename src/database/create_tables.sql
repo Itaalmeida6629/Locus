@@ -46,7 +46,7 @@ CREATE TABLE Reservas (
   usuario_id INT,
   data_inicio DATETIME NOT NULL,
   data_fim DATETIME NOT NULL,
-  status ENUM('Ativa' , 'Cancelada'),
+  status ENUM('ativa' , 'finalizada'),
   CONSTRAINT fk_reserva_usuario 
     FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
     ON DELETE SET NULL,

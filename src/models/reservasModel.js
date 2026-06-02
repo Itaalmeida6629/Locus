@@ -27,10 +27,10 @@ class ReservasModel {
         return rows
     }
 
-    static async createReserva({ id_usuario, sala_id, data_reserva, status }) {
+    static async createReserva({ id_usuario, sala_id, data_inicio, data_fim, status }) {
         const [result] = await db.query(
-            'INSERT INTO Reservas (id_usuario, sala_id, data_reserva, status) VALUES (?, ?, ?, ?)',
-            [id_usuario, sala_id, data_reserva, status])
+            'INSERT INTO Reservas (id_usuario, sala_id, data_inicio, data_fim, status) VALUES (?, ?, ?, ?, ?)',
+            [id_usuario, sala_id, data_inicio, data_fim, status])
         return result.insertId
     }
 
